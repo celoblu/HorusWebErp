@@ -1,0 +1,168 @@
+﻿@model ProdutosModel
+<!-- Formulario Tipo Modal BootStrap-->
+
+<form name="ModalProdutos">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h4 class="modal-title">Listagem de Produtos</h4>
+                <!-- <input asp-for="Id_Cliente" id="idCliente" style="display:none"/> -->
+                <br />
+
+                <div class="col-lg-8">
+                    <input id="ProdutoPesquisar" class="form-control" placeholder="Nome ou parte do nome a ser filtrado..." value="" />
+                </div>
+
+                <div class="col-sm-1">
+                    <buttom type="button" class="btn btn-info" onclick="Pesquisar()" align="left">Pesquisar</buttom>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-8"></div>
+
+                    <div class="col-lg-3">
+
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="radio1" value="0" name="TipoDeFiltro" checked>
+                            <label class="form-check-label" for="f1">Produtos</label>
+
+                            <input type="radio" class="form-check-input" id="radio2" value="1" name="TipoDeFiltro">
+                            <label class="form-check-label" for="f2">Referencia</label>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body" id="corpo">
+
+                <table class="table table-bordered" id="tbProd">
+
+                    <thead>
+                        <tr>
+                            <th class="col-lg-1">Codigo</th>
+                            <th class="col-lg-6" id="descricao">Descricao</th>
+                            <th class="col-lg-1" id="Qtd">Qtd</th>
+                            <th class="col-lg-1" id="Valor">Valor</th>
+                            <th class="col-lg-1">Selecionar</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="DtProd">
+
+                        @{
+                            foreach (var item in (List<ProdutosModel>)ViewBag.ListaProdutos)
+                            {
+
+                                //string idPro = string.Format("{0,5: 000000}", item.id).Trim();
+
+                                <tr class="dtProd">
+
+                                    <td class="col-lg-1">@item.id</td>
+                                    <td id="Nome" class="col-lg-6">@item.descricao</td>
+                                    <td id="Qtd" class="col-lg-1">@item.qtEstoque</td>
+                                    <td id="Vlrtb1" class="col-lg-1">@item.VlTabela1</td>
+                                    <td class="btn col-lg-1">
+
+                                        <button id="visualizarDados" type="button" class="btn btn-primary" onclick="Selecionar(@item.id)">
+                                            Selecionar
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+
+    </div><!-- /.modal-dialog -->
+</form>
+
+<script>
+
+    function Selecionar() {
+
+        // Nome do Produto(material)
+        $("tr").click(function (event) {
+            $(this).find('td:nth-child(2)').each(
+                function (i) {
+                    var _id = $(this).html();
+                    document.getElementById('NomeProduto').value = _id;
+                }
+            );
+        })
+
+        // Valor Unitario Tabela 1
+        $("tr").click(function (event) {
+            $(this).find('td:nth-child(4)').each(
+                function (i) {
+                    var _id = $(this).html();
+                    document.getElementById('VrlUnitario').value = _id;
+                }
+            );
+        })
+
+
+        $("tr").click(function (event) {
+            $(this).find('td:first').each(
+                function (i) {
+                    var _id2 = $(this).html();
+                    $('#myModal').modal('hide');
+                    //window.location = "/Tabelas/CategoriaSelecionada/" + _id;
+                    document.getElementById('idproduto').value = _id2;
+                    return true;
+                }
+            );
+        })
+
+    }
+
+    function Pesquisar() {
+
+        var StringData = document.getElementById("ProdutoPesquisar").value;
+        var radio = Radio(document.forms["ModalProdutos"].elements["TipoDeFiltro"]);
+        StringData = StringData.replace("/", " ").replace("+", " ").replace("-", " ");
+        StringData = StringData + "|" + radio;
+
+
+        if (StringData.length > 0) {
+            $.ajax({
+                type: "POST",
+                url: "/Tabelas/ListagemProdutos",
+                data: { id: StringData },
+                processData: true,
+                dataType: 'json',
+                success:
+                    function (lista) {
+                        lista = lista.replace(/"/g, '');
+                        DtProd.innerHTML = lista;
+                        return true;
+                    },
+                error: function (data) {
+                    alert("Verifique a Descrição ");
+                    return false;
+                },
+            });
+        }
+    }
+
+</script>
+

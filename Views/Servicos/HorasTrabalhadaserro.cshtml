@@ -1,0 +1,176 @@
+﻿@model OsHorasModel
+
+
+<div class="modal-dialog modal-lg hts">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3 class="modal-title">Hrs Trabalhadas</h3>
+            <br />
+
+            <div class="col-lg-5">
+                <label>Técnico</label>
+            </div>
+
+            <div class="col-lg-2 left">
+                <label>Hrs Trabalhadas</label>
+            </div>
+
+            <div class="col-lg-2 right">
+                <label style="text-align:right;">Valor Hora</label>
+            </div>
+
+            <div class="col-lg-2">
+                <label>Total</label>
+            </div>
+
+            <div class="col-lg-2">
+                <label>Gravar</label>
+            </div>
+
+            <div class="col-lg-5">
+                <select class="form-control" data-live-search="true" asp-for="id_profissional" value="" id="profissional">
+                    <option value="0">Selecione</option>
+
+                    @{ foreach (var item in (List<ProfissionaisModel>)ViewBag.Profissionais)
+                        {
+                            <option value="@item.Id">@item.nome</option>
+                        }
+                    }
+
+                </select>
+            </div>
+
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control" asp-for="qtdhoras" id="qtdhoras" />
+            </div>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control" asp-for="valorhora" id="valorhora" onblur="Totalizador(this);" />
+            </div>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="Total" />
+            </div>
+
+
+            <div class="col-sm-1">
+                <buttom type="button" class="btn btn-default" onclick="Gravar()"></buttom>
+                <img src="~/images/accept2.png">
+            </div>
+
+        </div>
+
+        <div class="modal-body" id="corpo">
+
+            <table class="table table-bordered" id="tbHrs">
+
+                <thead>
+                    <tr>
+                        <th class="col-lg-6">Profissional</th>
+                        <th class="col-lg-1">Hrs</th>
+                        <th class="col-lg-2">Valor</th>
+                    </tr>
+                </thead>
+
+                <tbody id="DtHoras">
+                    @{
+
+                        double Valor = 0;
+                        double Total = 0;
+
+
+                        foreach (var item in (List<OsHorasModel>)ViewBag.HrsTrabalhadas)
+                        {
+
+                            Valor = item.valorhora * item.qtdhoras;
+                            Total += Valor;
+
+                            <tr class="body-content">
+                                <td class="col-lg-6">@item.nome</td>
+                                <td class="col-lg-2">@item.qtdhoras</td>
+                                <td class="col-lg-2 text-right"> @string.Format("R$  {0:N2}", Valor)</td>
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+
+            </table>
+
+            <div class="row">
+
+                <div class="col-lg-10">
+                </div>
+
+                <div class="col-lg-2">
+                    <b>
+                        <input type="text" class="form-control" value="@string.Format("R$  {0:N2}",Total)" disabled style="background-color:bisque; text-align: right;">
+                    </b>
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+        </div>
+
+    </div><!-- /.modal-content -->
+
+</div><!-- /.modal-dialog -->
+
+
+<script>
+
+    function Totalizador() {
+        var qtdhoras = parseFloat(document.getElementById("qtdhoras").value);
+        var vlrunitario = parseFloat(document.getElementById("valorhora").value);
+
+
+        if (Number.isNaN(qtdhoras)) return;
+
+        if (Number.isNaN(vlrunitario)) return;
+
+        document.getElementById("Total").value = qtdhoras * vlrunitario;
+        return
+    }
+
+
+    function Gravar() { 
+        var id_os = @ViewBag.HrsTrabalhadas.id_os;
+        var idprofissional = parseFloat(document.getElementById("profissional").value);                  
+        var qtdhoras = parseFloat(document.getElementById("qtdhoras").value);
+        var vlrunitario = parseFloat(document.getElementById("valorhora").value);
+        if (Number.isNaN(qtdhoras)) return;
+
+        if (Number.isNaN(vlrunitario)) return;
+
+        var parametros = id_os + "|" + idprofissional + "|" + qtdhoras + "|" + vlrunitario;
+
+        $.ajax({
+            type: "POST",
+            url: "/Servicos/InserirHoras",
+            data: { id: parametros },
+            processData: true,
+            dataType: 'html',
+            success:
+                function (lista) {
+                    lista = lista.replace(/"/g, '');
+                    DtHoras.innerHTML = lista;
+                    return true;
+                },
+            error: function (data) {
+                alert("Verifique o Técnico");
+                return false;
+            },
+        });
+    }
+
+</script>

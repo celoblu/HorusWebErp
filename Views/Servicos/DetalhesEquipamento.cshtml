@@ -1,0 +1,71 @@
+﻿@model EquipamenotosModel
+
+@{
+    ViewData["Title"] = "Detalhes";
+}
+
+<h2>Equipamentos - Detalhes</h2>
+
+
+<form asp-action="DetalhesEquipamento" asp-controller="Servicos" method="post" onsubmit="return VerificaDados();">
+
+    <hr />
+    <div class="row">
+
+        <div class="form-group col-md-1">
+            <label for="campo1">Código</label>
+            <input asp-for="id" type="text" class="form-control" id="Id" value="@ViewBag.Dados.id" style="display:none">
+            <input type="text" class="form-control" value="@ViewBag.Dados.id" disabled>
+
+        </div>        
+
+    </div>         
+
+    <div class="row">
+        <div class="form-group col-md-10">
+            <label for="campo1">Nome do Equipamento</label>
+            <input asp-for="Descricao" type="text" class="form-control" id="descricao" value="@ViewBag.Dados.Descricao" placeholder="Nome do Equipamento" maxlength="100">
+        </div>
+    </div>
+
+    <!-- Buttons Finais-->
+    <hr />
+    <div class="row">
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="submit" class="btn btn-danger btn-block">
+                Salvar Dados
+            </button>
+        </div>
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="button" class="btn  btn-success btn-block" onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+
+    </div>
+    <!---->
+
+</form>
+
+
+<script>
+
+    function VerificaDados() {
+        var str = document.getElementById("descricao").value;
+        if (str == "0") {
+            alert("Equipamento deve ser informado");
+            return false;
+        }
+
+        return true;
+
+    }
+    function Retornar() {
+        window.location.href = "/Servicos/Equipamentos";
+    }
+
+</script>
+
+

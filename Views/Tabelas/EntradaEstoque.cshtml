@@ -1,0 +1,370 @@
+﻿@model ProdutosModel
+
+<h2>Entradas de Estoque</h2>
+
+<form class="htsfundo" asp-action="EntradaEstoque" asp-controller="Tabelas" method="post" onsubmit="return VerificaDados();">
+
+    <hr />
+
+    <textarea id="ListaEntradas" asp-for="ListaEntradas" cols=100 rows=2 style="display:none">
+    </textarea>
+
+    <div id="Entradas">
+
+        <div class="row">
+
+            <div class="form-group col-md-1">
+                <label for="campo1">Produto</label>
+                <input asp-for="id" type="text" class="form-control hts" id="idproduto" value="">
+            </div>
+
+            <div class="form-group col-md-1">
+                <label for="campo1">Pesquisar</label>
+                <button type="button" class="btn btn-default btn-sm " id="IdProduto" data-toggle="modal" data-id="IdProduto" onclick="CodProduto();">
+                    <img src="~/images/binoculo.png">
+                </button>
+            </div>
+
+            <div class="form-group col-md-9">
+                <label for="campo1">Descrição Produto</label>
+                <input asp-for="descricao" type="text" class="form-control" id="NomeProduto" value="">
+            </div>
+
+            <div class="form-group col-md-1">
+                <label for="campo1">Pesquisar</label>
+                <button type="button" class="btn btn-default btn-sm Produtos" id="IdProduto" data-toggle="modal" data-id="IdProduto" >
+                    <img src="~/images/binoculo.png">
+                </button>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="form-group col-md-3">
+                <label for="campo1">Quantidade</label>
+                <!-- <input type="text" class="form-control" id="Qtd" value="0,00" onkeypress="handleNumber(event, '{9,2}')" maxlength="12"> -->
+                <input type="text" class="form-control" id="Qtd" value="0,00" onkeypress="return(MascaraMoeda(this,'.',',',event,2))" maxlength="12">
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="campo2">Valor Compra R$</label>
+                <input type="text" class="form-control" id="VrlUnitario" style="display:none">
+                <input type="text" class="form-control" id="vlUltCompra" value="0,00" onkeypress="return(MascaraMoeda(this,'.',',',event,2))" maxlength="12">
+            </div>
+
+
+            <div class="form-group col-md-3">
+                <label for="campo3">Valor Venda R$</label>
+                <input type="text" class="form-control" id="VlTabela1" value="0,00" onkeypress="return(MascaraMoeda(this,'.',',',event,2))" maxlength="12">
+            </div>
+
+            <div class="form-group col-lg-1">
+            </div>
+
+            <div class="form-group col-md-1">
+                <label for="campo4">Gravar</label>
+                <button type="button" class="btn btn-default btn-sm" onclick="Adicionar()">
+                    <img src="~/images/accept2.png">
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <table class="table table-bordered table-condensed" style="line-height:2px;height:3px;font-size:12px;">
+
+        <thead>
+
+            <tr>
+                <th class="col-lg-1">ID</th>
+                <th class="col-lg-7">Produto</th>
+                <th class="col-lg-1">Qtd.</th>
+                <th class="col-lg-1">R$ Vlr Compra</th>
+                <th class="col-lg-1">R$ Vlr Venda</th>
+                <th class="col-lg-1">#</th>
+            </tr>
+
+        </thead>
+
+        <tbody id="ProdutosEntradas" style="color:blue"></tbody>
+
+    </table>
+
+    <hr />
+
+    <div class="row">
+
+        <div class="horizontal form-group col-lg-6">
+            <button type="submit" id="Btnsubmit" class="btn btn-success btn-block">
+                Entrada de Estoque
+            </button>
+        </div>
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="button" class="btn  btn-danger btn-block" onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+
+    </div>
+
+
+
+</form>
+
+<div id="myModal" class="modal" role="document">
+</div>
+
+<style>
+    .mesmo-tamanho {
+        width: 15%;
+        white-space: normal;
+    }
+
+    .pequeno {
+        width: 20%;
+    }
+
+    .medio {
+        width: 100%;
+    }
+</style>
+
+
+@section scripts{
+
+    <script>
+
+        var Itens = new Object();
+        Itens.Entradas = new Array();
+
+        var Id = 0;
+        var Material = "";
+        var ListaEntradas = document.getElementById("ListaEntradas");        //  Memo para verificar lista json
+        var ProdutosEntradas = document.getElementById("ProdutosEntradas");  //  Tabela HTML
+
+        function Adicionar() {
+
+            var id = document.getElementById("idproduto").value;
+            var descricao = document.getElementById("NomeProduto").value;
+            var qtd = document.getElementById("Qtd").value;
+            var vlrCompra = document.getElementById("vlUltCompra").value;
+            var VlrVenda = document.getElementById("VlTabela1").value;
+
+            if (qtd.length == 0 || parseFloat(qtd) <= 0) {
+                alert("Qtd é Obrigatória!");
+                return false;
+            }
+
+            if (vlrCompra.length == 0 || parseFloat(vlrCompra) <= 0) {
+                vlrCompra = "0";
+            }
+            
+            if (VlrVenda.length == 0 || parseFloat(VlrVenda) <= 0) {               
+                VlrVenda = "0";
+            }
+
+            qtd = qtd.replace('.', '');
+            qtd = qtd.replace(',', '.');
+            vlrCompra = vlrCompra.replace('.', '');
+            vlrCompra = vlrCompra.replace(',', '.');
+            VlrVenda = VlrVenda.replace('.', '');
+            VlrVenda = VlrVenda.replace(',', '.');
+
+            if (descricao.length == 0) {
+                alert("Produto é Obrigatorio");
+                return false;
+            }
+
+            MinhaLista(id, descricao, qtd, vlrCompra, VlrVenda);
+            TabelaHTML(id, descricao, qtd, vlrCompra, VlrVenda
+
+            );
+
+            Meuid++;
+
+        }
+
+        function MinhaLista(p1, p2, p3, p4, p5) {
+
+            Itens.Entradas.push(
+                {
+                    "Id": p1,
+                    "Descricao": p2,
+                    "qtEstoque": p3,
+                    "vlUltCompra": p4,
+                    "VlTabela1": p5,
+                }
+            );
+
+            ListaEntradas.innerHTML = JSON.stringify(Itens.Entradas);
+            return true;
+        }
+
+        function TabelaHTML(p1, p2, p3, p4, p5) {
+
+            var Lista = "<tr>" +
+                "<td id='tdId'>" + p1 + "</td>" +
+                "<td >" + p2 + "</td>" +
+                "<td >" + p3 + "</td>" +
+                "<td >" + p4 + "</td>" +
+                "<td >" + p5 + "</td>" +
+                "<td >" + '<imput type="text" class="btn-link " onclick="Remover(this.id)"> Remover </imput>' + "</td>" +
+                "</tr>";
+
+            ProdutosEntradas.innerHTML += Lista;
+
+            $('#Entradas input').each(function () {
+                $(this).val('');
+            });
+
+            return true;
+        }
+
+        function Remover() {
+
+            $("tr").click(function () {
+
+                $(this).find('td:first').each(
+
+                    function (i) {
+                        $th = $("thead th")[i];
+                        stringx = $(this).html()
+                        removerPorId(stringx.substring(0, 6));
+                        return true;
+
+                    }
+                );
+
+            })
+        }
+
+        function removerPorId(ID) {
+
+            $(".excluir").click(function () {
+                $(this).parents('tr').remove();
+            });
+
+            Meuid            = 0;
+            var idTmp        = "";
+            var DescricaoTmp = "";
+            var QtdTmp       = "";
+            var vlrCompraTmp = "";
+            var vlrVendaTmp  = "";
+
+            ProdutosEntradas.innerHTML = "";
+            ListaEntradas.innerHTML = "";
+
+            var Itenstmp = new Object();
+            Itenstmp.Entradas = new Array();
+
+            Itenstmp.Entradas = Itens.Entradas;  // array de backup
+            Itens.Entradas = new Array();
+            // limpa array
+
+            for (var i = 0; i < 50; i++) {
+
+                if (Itenstmp.Entradas[i] !== null && Itenstmp.Entradas[i] !== undefined) {
+
+                    idTmp = Itenstmp.Entradas[i].Id;
+
+                    if (idTmp != ID) {
+
+                        idTmp = Itenstmp.Entradas[i].Id;
+                        DescricaoTmp = Itenstmp.Entradas[i].Material;
+                        QtdTmp = Itenstmp.Entradas[i].qtEstoque;
+                        vlrCompraTmp = Itenstmp.Entradas[i].vlrCompraTmp;
+                        vlrVendaTmp = Itenstmp.Entradas[i].VlTabela1;
+
+                        MinhaLista(idTmp, DescricaoTmp, QtdTmp, vlrCompraTmp, vlrVendaTmp);
+                        TabelaHTML(idTmp, DescricaoTmp, QtdTmp, vlrCompraTmp);
+                        Meuid++;
+                    }
+                }
+            }
+
+            // ListaProfisionais.innerHTML = JSON.stringify(Itens.Profissional);
+            return true;
+        }
+
+        //***************
+        // Pesquisa Modal
+        //***************
+        $(function () {
+            $(".Produtos").click(function () {
+                var Variavel = "";
+                $("#myModal").load("TabelaProdutos", function () {
+                    $("#myModal").modal('toggle');
+                })
+            });
+        });
+               
+
+        //*******************
+        // Pesq.  pelo Código
+        //*******************        
+        function CodProduto() {                      
+
+            var Variavel = document.getElementById("idproduto").value;                                  
+           
+
+            if (Variavel.length > 0) {           
+
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Tabelas/LocalizarProduto",
+                        data: { id: Variavel },
+                        processData: true,
+                        dataType: 'html',
+                        success:
+                            function (retorno) {                              
+
+                                // alert(retorno);
+                                var obj = JSON.parse(retorno);                             
+
+                                document.getElementById("NomeProduto").value = obj.descricao;
+                                document.getElementById("idproduto").value = obj.id;
+                                return true;
+
+                            },
+                        error: function (data) {
+                            alert("Produto não Identificada");
+                            return false;
+                        },
+                    });
+            }
+        }
+                     
+        function Retornar() {
+
+            if (Itens.Entradas.length == 0) {
+                window.location.href = "/Home/Index";
+                return;
+            }
+
+            var ret = window.confirm("Retornar ao Menu?");
+            if (ret) {
+                window.location.href = "/Home/Index";
+            }
+            else {
+
+            }
+        }
+
+        function VerificaDados() {
+
+            if (Itens.Entradas.length == 0) {
+                alert("Deve ser lançado algum produto!");
+                return false;
+            }
+
+            return true;
+        }
+
+    </script>
+}
+
+

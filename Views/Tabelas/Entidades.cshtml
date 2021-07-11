@@ -1,0 +1,106 @@
+﻿@model ClienteModel;
+
+@{
+    ViewData["Title"] = "Listagem de Entidades";
+}
+
+<h2>Clientes/Fornecedores/Transportadoras - Listagem</h2>
+
+<form>
+
+    <div class="well well-sm custom-control custom-radio col-lg-12">
+        <div class="form-group col-lg-8">
+            <input id="Filtro" value="" class="form-control" placeholder="Digite Produto ou Parte Dele" />
+        </div>       
+
+        <div class="form-group col-lg-2">
+            <button type="button" class="btn btn-block btn-success" onclick="Filtrar()">Filtrar</button>
+        </div>
+
+        <div class="form-group col-lg-2">
+            <button type="button" class="btn btn-block btn-primary" onclick="Inclusao()">Novo Cliente</button>
+        </div>
+
+    </div>
+
+    <table class="table table-bordered" id="TabEntidades">
+
+        <thead>
+            <tr>
+                <th class="col-lg-1" style="display:none">id</th>
+                <th class="col-lg-5">Descrição</th>
+                <th class="col-lg-3 text-center">Endereco</th>
+                <th class="col-lg-2 text-center">Cidade</th>
+                <th class="col-lg-1 text-center">Telefone</th>
+                <th class="col-lg-1">#</th>
+            </tr>
+        </thead>
+
+        <tbody id="tby">
+
+            @{
+                foreach (var item in (List<ClienteModel>)ViewBag.ListaClientes)
+                {
+                        <tr>
+                            <td id="idAgenda" class="col-lg-1" style="display:none">item.id</td>
+                            <td id="idData" class="col-lg-5">@item.nome</td>
+                            <td id="idData" class="col-lg-3">@item.logradouro</td>
+                            <td id="nome" class="col-lg-2">@item.cidade</td>
+                            <td id="nome" class="col-lg-1">@item.fone1</td>
+                            <td id="btn1" class="col-lg-1">
+                                <button type="button" class="btn btn-info" onclick="Detalhes(@item.id);">
+                                    Detalhes
+                                </button>
+                            <td id="btn1" class="col-lg-1">
+                                 <button type="button" class="btn btn-danger" onclick="Excluir(@item.id);">
+                                    Excluir
+                                 </button>
+                            </td>
+                        </tr>
+                }
+            }
+
+        </tbody>
+
+    </table>
+
+    <div class="row">
+        <div class="form-horizontal">
+            <button type="button" class="btn  btn-danger btn-block " onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+    </div>
+
+</form>
+
+<script>
+       
+    function Inclusao(cod) {
+        window.location.href = "/Tabelas/IncluirEntidade/" + cod
+    }
+
+    function Detalhes(cod) {
+        window.location.href = "/Tabelas/DetalhesEntidade2/" + cod
+    }
+
+    function Excluir(cod) {
+        window.location.href = "/Tabelas/ExcluirEntidade2/" + cod;
+    }
+
+    function Filtrar() {
+
+        var StringData = document.getElementById("Filtro").value;
+        StringData = StringData.replace("/", " ").replace("+", " ").replace("-", " ");
+
+        window.location.href = "/Tabelas/PesquisaEntidades/" + StringData;
+    }
+
+    function Retornar() {
+        window.location.href = "/Home/Index";
+    }
+
+</script>
+
+
+

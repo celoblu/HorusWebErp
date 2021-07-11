@@ -1,0 +1,126 @@
+﻿@model CategoriasModel
+
+<!-- Formulario Tipo Modal BootStrap-->
+<form name="ModalCategorias">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h4 class="modal-title">Pesquisa de Grupos/Categorias</h4>
+                <!-- <input asp-for="Id_Cliente" id="idCliente" style="display:none"/> -->
+                <br />
+
+                <div class="col-lg-8">
+                    <input id="CategoriaPesquisar" class="form-control" placeholder="Nome ou parte do nome a ser filtrado" value="" />
+                </div>
+
+                <div class="col-sm-1">
+                    <buttom type="button" class="btn btn-info" onclick="Pesquisar()" align="left">Pesquisar</buttom>
+                </div>
+
+            </div>
+
+            <div class="modal-body" id="corpo">
+
+                <table class="table table-bordered" id="tbCat">
+
+                    <thead>
+                        <tr>
+                            <th class="col-lg-1">Codigo</th>
+                            <th class="col-lg-6" id="descricao">Descricao</th>
+                            <th class="col-lg-1">Selecionar</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="DtCat">
+
+                        @{
+                            foreach (var item in (List<CategoriasModel>)ViewBag.ListaCategorias)
+                            {
+
+                                string idcli = string.Format("{0,5: 000000}", item.id).Trim();
+
+                                <tr class="dtcat">
+
+                                    <td class="col-lg-1">@idcli</td>
+                                    <td id="NomeCat" class="col-lg-6">@item.descricao</td>
+                                    <td class="btn col-lg-1">
+                                        <button type='button' onclick='Selecionar(@item.id)'>Selecionar</button>
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+
+        </div><!-- /.modal-content -->
+
+    </div><!-- /.modal-dialog -->
+</form>
+
+<script>
+
+    function Selecionar() {
+
+        $("tr").click(function (event) {
+            $(this).find('td:nth-child(2)').each(
+                function (i) {
+                    var _id = $(this).html();
+                    document.getElementById('descategoria').value = _id;
+                }
+            );
+        })
+
+
+        $("tr").click(function (event) {
+            $(this).find('td:first').each(
+                function (i) {
+                    var _id2 = $(this).html();
+                    $('#myModal').modal('hide');
+                    //window.location = "/Tabelas/CategoriaSelecionada/" + _id;
+                    document.getElementById('id_produto_categoria').value = _id2;
+                    return true;
+                }
+            );
+        })
+    }
+
+    function Pesquisar() {
+        var Empresa = document.getElementById("CategoriaPesquisar").value;
+
+        if (Empresa.length > 0) {
+
+            $.ajax({
+                type: "POST",
+                url: "/Tabelas/ListagemCategorias",
+                data: { id: Empresa },
+                processData: true,
+                dataType: 'json',
+                success:
+                    function (lista) {
+                        lista = lista.replace(/"/g, '');
+                        DtCat.innerHTML = lista;
+                        return true;
+                    },
+                error: function (data) {
+                    alert("Verifique a Descrição ");
+                    return false;
+                },
+            });
+        }
+    }
+
+</script>
+

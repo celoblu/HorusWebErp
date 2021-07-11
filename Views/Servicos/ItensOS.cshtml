@@ -1,0 +1,93 @@
+﻿@model OrdemServicoModel;
+
+
+<div class="modal-dialog modal-lg">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3 class="modal-title">Materiais</h3>
+
+            <div class="row col-lg-1">
+                <input type="text" class="form-control" id="idos" value="@ViewBag.id_os" style="display:none" />
+            </div>
+
+            <br />
+
+        </div>           
+    
+        <div class="modal-body" id="corpo">
+
+            <table class="table table-bordered" id="tbMateriais">
+                                
+                <thead>
+                    <tr>
+                        <th class="col-lg-6">Descricao</th>
+                        <th class="col-lg-1">Quantidade</th>
+                        <th class="col-lg-1">Vlr Unit.</th>
+                        <th class="col-lg-2">Valor</th>
+                    </tr>
+                </thead>                
+
+                <tbody id="DtMateriais">
+                    @{
+                        // Valor data pcas
+                        decimal Valor = 0;
+                        decimal Total = 0;
+
+                        foreach (var item in (List<ItensOrdemServicoModel>)ViewBag.ListagemMaterias)
+                        {
+                            string DescricaoProduto = "";
+
+                            if (item.NomeProdutoX == null)
+                            {
+                                DescricaoProduto = item.NomeProduto.Trim();
+                            }
+                            else
+                            {
+                                DescricaoProduto = item.NomeProdutoX.Trim();
+                            }
+
+                            Valor = item.valor_unitario * item.quantidade;
+                            Total += Valor;
+
+                            <tr class="lstMateriais">
+                                <td class="col-lg-6">@DescricaoProduto</td>
+                                <td class="col-lg-1">@item.quantidade</td>
+                                <td class="col-lg-1">@item.valor_unitario</td>
+                                <td class="col-lg-2">@string.Format("{0:N2}", Valor)</td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+
+            <div class="row">
+                <div class="col-lg-6">
+                </div>
+
+                <div class="col-lg-3">
+                    <b>
+                        <input type="text" class="form-control" value="@string.Format("M.O     R$ {0:N2}",ViewBag.TotalMaoDeObra)" disabled style="background-color:bisque; text-align: right;">
+                    </b>
+                </div>
+
+                <div class="col-lg-3">
+                    <b>
+                        <input type="text" class="form-control" value="@string.Format("Materiais  R$ {0:N2}",Total)" disabled style="background-color:bisque; text-align: right;">
+                    </b>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+        </div>
+
+    </div><!-- /.modal-content -->
+
+</div><!-- /.modal-dialog -->

@@ -1,0 +1,96 @@
+﻿@model ProfissionaisModel
+
+@{
+    ViewData["Title"] = "Exclusão";
+}
+
+<h2>Exclusão</h2>
+
+<form asp-action="ExclusaoProfissional" asp-controller="Tabelas" method="post" onsubmit="return Excluir();">
+
+    <hr />
+    <div class="row">
+
+        <div class="form-group col-md-1">
+            <label for="campo1">Código</label>
+            <input asp-for="Id" type="text" class="form-control" value="@ViewBag.Dados.Id" style="display:none">
+            <input type="text" class="form-control" value="@ViewBag.Dados.Id" disabled>
+        </div>
+
+        <div class="form-group col-md-10">
+            <label for="campo1">Nome do Profissional</label>
+            <input asp-for="nome" type="text" class="form-control" id="nome" value="@ViewBag.Dados.nome" placeholder="Digite o Nome" disabled>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="form-group col-md-2">
+            <label for="campo1">Apelido (Nome Curto)</label>
+        </div>
+
+        <div class="form-group col-md-8">
+            <label for="campo3">Função</label>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+
+        <div class="form-group col-md-2">
+            <input asp-for="apelido" type="text" class="form-control" id="apelido" value="@ViewBag.Dados.apelido" placeholder="Nome Curto" disabled>
+        </div>
+
+        <div class="form-group col-md-8">
+            <input asp-for="dscfuncao" type="text" class="form-control" id="dscfuncao" value="@ViewBag.Dados.dscfuncao" disabled />
+        </div>
+
+    </div>
+
+
+    <!-- Buttons Finais-->
+    <hr />
+    <div class="row">
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="submit" class="btn btn-danger btn-block">
+               Excluir
+            </button>
+        </div>
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="button" class="btn  btn-success btn-block" onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+
+    </div>
+    <!---->
+
+</form>
+
+
+<script>
+
+    function Excluir() {
+
+        if ( confirm("Você Confirma a Exclusão") ) {            
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+   
+
+    function Retornar() {
+        window.location.href = "/Tabelas/FiltroProfissional";
+    }
+
+</script>
+
+

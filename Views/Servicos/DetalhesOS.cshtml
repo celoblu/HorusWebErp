@@ -1,0 +1,268 @@
+﻿@model OrdemServicoModel
+
+@{
+    ViewData["Title"] = "Ordem de Serviço";
+}
+
+<h2>Ordem de Serviço - Detalhes da O.S </h2> 
+
+<form class="htsfundo" asp-action="" asp-controller="Servicos" method="post" onsubmit="VerificaDados();">
+
+    <!-- Dados do cliente -->
+    <hr />
+
+    <div class="row">
+
+        <div class="form-group col-md-10">
+            <label for="campo1">Descrição</label>
+            <input asp-for="NomeCliente" type="text" class="form-control hts" id="Descricao" value="@ViewBag.DetalhesOS.NomeCliente">
+        </div>
+
+        <div class="form-group col-md-1">
+            <label for="campo2">Código</label>
+            <input type="text" class="form-control hts" id="IdOS" value="@ViewBag.DetalhesOS.id_os_gcfox">
+            <input type="text" class="form-control hts" id="id" value="@ViewBag.DetalhesOS.Id" style="display:none;">
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="form-group col-md-7">
+            <label for="campo3">Logradouro</label>
+            <input class="form-control hts" value="@ViewBag.DetalhesOS.Endereco" />
+        </div>
+
+        <div class="form-group col-md-3">
+            <label for="campo3">Cidade</label>
+            <input class="form-control hts" value="@ViewBag.DetalhesOS.Cidade" />
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            <label for="campo5">Bairro</label>
+            <input class="form-control hts" value="@ViewBag.DetalhesOS.Bairro" />
+        </div>
+
+        <div class="form-group col-md-2">
+            <label for="campo5">Telefone</label>
+            <input class="form-control hts" value="@ViewBag.DetalhesOS.Fone1" />
+        </div>
+
+        <div class="form-group col-md-2">
+            <label for="campo4">Telefone</label>
+            <input class="form-control hts" value="@ViewBag.DetalhesOS.Fone2" />
+        </div>
+
+    </div>
+
+    <!-- Equipamento -->
+    <hr />
+
+    <div class="row">
+
+        <div class="form-group col-md-2">
+            <label for="campo5">Placa</label>
+            <input class="form-control hts" value="@ViewBag.DetalhesOS.placa" />
+        </div>
+
+        <div class="form-group col-md-5">
+            <label for="campo5">Veículo</label>
+            <input class="form-control hts" value="@ViewBag.DetalhesOS.DescricaoEquipamento" />
+        </div>
+
+        <div class="form-group col-md-2">
+            <label for="campo4">km</label>
+            <input class="form-control hts" value="@ViewBag.DetalhesOS.km" onKeyPress="return SomenteNumero(event, this);" />
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="form-group col-md-8">
+            <label for="campo5">Serviço</label>
+            <input class="form-control hts" value="@ViewBag.DetalhesOS.modelo" />
+        </div>
+
+        <div class="form-group col-md-1">
+            <label for="campo6">Ano</label>
+            <input class="form-control hts" value="@ViewBag.DetalhesOS.ano" />
+        </div>
+
+    </div>
+
+
+    <!-- Descricao / Conclusão -->
+    <hr />
+
+    <div class="row">
+
+        <div class="form-group">           
+             <textarea class="memo" rows="5" cols="30" id="conclusao" name="conclusao">@ViewBag.DetalhesOS.conclusao</textarea>           
+        </div>
+
+    </div>
+
+    <!-- Totalizadores da O.S -->
+    <hr />
+    @{ 
+
+        decimal vlorMat = Convert.ToDecimal(ViewBag.ValorMateriais);
+        decimal vlorMO = Convert.ToDecimal(ViewBag.ValorMO);
+        decimal vlorTot = Convert.ToDecimal(ViewBag.ValorTotal);        
+
+    }
+
+    <div class="row">
+
+        <div class="form-group span9">
+
+            <div class="form-group-sm">
+                
+                <div class="form-group col-md-2">                
+                </div>
+
+                <div class="form-group col-md-3" >
+                    <label>Total Materiais</label>                    
+                    <input class="form-control hts" id="vlorMat" style="font-size:medium; text-align:right " 
+                           value="@string.Format("R$  {0:N2}", vlorMat)" disabled/>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label>Total Serviços</label>
+                    <input class="form-control hts" id="vlorMO" style="font-size:medium; text-align:right" 
+                           value="@string.Format("R$  {0:N2}", vlorMO)" disabled />
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label>Total O.S</label>
+                    <input class="form-control hts" id="vlorTot" style="font-size:medium; text-align:right" 
+                           value="@string.Format("R$  {0:N2}", vlorTot)" disabled />
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Buttons -->
+    <hr />
+
+    <div class="row">
+
+        <div class="form-horizontal form-group col-lg-4">
+            <button type="button" class="btn  btn-primary btn-block Itens" onclick="Itens();">
+                Itens O.S
+            </button>
+        </div>
+
+        <div class="form-horizontal form-group col-lg-4">
+            <button type="button" class="btn  btn-success btn-block HorasTrabalhada">
+                Horas Trabalhadas
+            </button>
+        </div>
+
+        <div class="form-horizontal form-group col-lg-4">
+            <button type="button" class="btn  btn-danger btn-block " onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+    </div>
+
+</form>
+
+
+<div id="myModal" class="modal htsfundo" role="document">
+</div>
+
+
+<style>
+
+    textarea {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    .mesmo-tamanho {
+        width: 15%;
+        white-space: normal;
+    }
+
+    .pequeno {
+        width: 20%;
+    }
+
+    .medio {
+        width: 100%;
+    }
+
+</style>
+
+@section scripts{
+
+    <script>
+
+        /*
+         // <DESATIVA TECLA ENTER>
+          $(document).ready(function () {
+                $(window).keydown(function (event){
+             if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+             }
+            });
+          });
+        */
+
+
+        $(function () {
+
+            $(".HorasTrabalhada").click(function () {
+
+                var id1 = document.getElementById("id").value;
+                var id2 = document.getElementById("IdOS").value;
+                var id = id1 + "|" + id2
+
+                $("#myModal").load("HorasTrabalhadas/" + id, function () {
+                    $("#myModal").modal('toggle');                   
+                })
+            });
+        });
+
+
+        // Itens os       
+        $(function () {
+
+            $(".Itens").click(function () {
+
+                var id1 = document.getElementById("id").value;  
+                var id2 = document.getElementById("IdOS").value;                            
+                var id = id1 + "|" + id2              
+
+                $("#myModal").load("ItensOS/" + id, function () {
+                    $("#myModal").modal('toggle');
+                })
+            });
+        });
+
+       
+
+        function VerificaDados() {
+            alert("");
+        }
+
+        function Retornar() {
+            window.location.href = "/Servicos/OrdensDeServico";
+        }
+
+    </script>
+}
+

@@ -1,0 +1,132 @@
+﻿@model ProfissionaisModel;
+
+@{
+    ViewData["Title"] = "Profissionais";
+}
+
+<h2>Profissionais</h2>
+
+<form name="ListaOS">
+
+    <div class="well well-sm custom-control custom-radio col-lg-12">
+
+        <div class="form-group col-lg-8">
+            <input id="Filtro" value="" class="form-control" placeholder="Digite Nome ou Parte Dele" />
+        </div>
+
+        <div class="form-group col-lg-2">
+            <button type="button" class="btn btn-block btn-success" onclick="Filtrar()">Filtrar</button>
+        </div>
+
+        <div class="form-group col-lg-2">          
+            <button type="button" class="btn btn-block btn-primary" onclick="Inclusao()">Novo Técnico</button>
+        </div>
+
+    </div>
+
+    <table class="table table-bordered" id="TabRacas">
+
+        <thead>
+            <tr>
+                <th class="col-lg-1">id</th>
+                <th class="col-lg-8">Nome</th>
+                <th class="col-lg-8">Função</th>
+                <th class="col-lg-1">#</th>
+                <th class="col-lg-1">#</th>               
+            </tr>
+        </thead>
+
+        <tbody id="tby">
+
+            @{
+
+                foreach (var item in (List<ProfissionaisModel>)ViewBag.LstProfisasionais)
+                {
+
+            <tr>
+
+                <td id="idAgenda" class="col-lg-1">@item.Id</td>
+                <td id="idAgenda" class="col-lg-5" style="display:normal">@item.nome</td>
+                <td id="idAgenda" class="col-lg-4" style="display:normal">@item.dscfuncao</td>                
+              
+                <td id="btn1" class="col-lg-1"><button type="button" class="btn btn-info" onclick="Detalhes(@item.Id);">Detalhes</button></td>
+                <td id="btn1" class="col-lg-1"><button type="button" class="btn btn-danger" onclick="Exclusao(@item.Id);">Exclusão</button></td>
+            </tr>
+                }
+            }
+
+        </tbody>
+
+    </table>
+
+    <div class="row">
+        <div class="form-horizontal">
+            <button type="button" class="btn  btn-danger btn-block " onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+    </div>
+
+</form>
+
+<script>
+
+    function Detalhes(cod) {
+        //window.location.href = "/Tabelas/DetalhesProfissional2/" + cod
+
+        $("tr").click(function () {
+            var cod = $(this).find("td:eq(0)").text();
+            window.location.href = "/Tabelas/DetalhesProfissional2/" + cod
+        })    
+    }
+
+    function Inclusao() {
+        window.location.href = "/Tabelas/InclusaoProfissional/"
+    }
+
+    function Exclusao(cod) {
+        
+        if (confirm("Confirma a Exclusão")) {
+
+            $("tr").click(function () {
+
+                var ID = $(this).find("td:eq(0)").text();               
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Tabelas/ExclusaoProfissional2",
+                    data: { id: ID },
+                    processData: true,
+                    dataType: 'json',
+                    success:
+                        function (lista) {
+                            lista = lista.replace(/"/g, '');
+                            tby.innerHTML = lista;
+                            Limpa();
+                            return true;
+                        },
+                    error: function (data) {
+                        alert("Erro... Verifique Com Suporte");
+                        return false;
+                    },
+                });
+            })
+        }
+
+    }
+
+    function Filtrar() {
+
+        var StringData = document.getElementById("Filtro").value;
+        StringData = StringData.replace("/", " ").replace("+", " ").replace("-", " ");
+
+        window.location.href = "/Tabelas/FiltroProfissional/" + StringData;
+    }
+
+    function Retornar() {
+        window.location.href = "/Home/Index";
+    }
+
+</script>
+
+

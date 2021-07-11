@@ -1,0 +1,235 @@
+﻿
+@model ProdutosModel
+
+@{
+    ViewData["Title"] = "Detalhes do Produto";
+}
+
+<h2>Detalhes Produto</h2>
+
+<form class="htsfundo" asp-action="DetalhesProduto" asp-controller="Tabelas" method="post" onsubmit="">
+
+    <div class="row">
+
+
+        <div class="form-group col-md-10">
+            <label for="campo1">Descrição do Produto</label>
+            <input asp-for="descricao" type="text" class="form-control" value="@ViewBag.Produto.descricao">
+            <span asp-validation-for="descricao" class="alert-danger"></span>
+        </div>
+
+
+        <div class="form-group col-md-1">
+            <!-- <label for="campo2">Código</label> -->
+            <input asp-for="id" type="text" class="form-control" id="IdProduto" value="@ViewBag.Produto.id" style="display:none">
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="form-group col-md-10">
+            <label for="campo3">Inf. Adicional</label>
+            <input asp-for="infadicional" class="form-control" id="infadicional" value="@ViewBag.Produto.infadicional" />
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label for="campo5">GTIN</label>
+            <input asp-for="gtin" class="form-control" id="gtin" value="@ViewBag.Produto.gtin" />
+        </div>
+
+        <div class="form-group col-md-3">
+            <label for="campo4">Referência</label>
+            <input asp-for="referencia" class="form-control" id="referencia" value="@ViewBag.Produto.referencia" />
+
+        </div>
+
+        <div class="form-group col-md-3">
+            <label for="campo6">Ref. de Compra</label>
+            <input asp-for="referenciacompra" class="form-control" id="Referenciacompra" value="@ViewBag.Produto.referenciacompra" />
+        </div>
+    </div>
+
+    <!-- Pesquisas  -->
+    <div class="row">
+        <div class="form-group col-md-1">
+            <label for="campo7">Grupo</label>
+            <input asp-for="id_produto_categoria" class="form-control" id="id_produto_categoria" value="@ViewBag.Produto.id_produto_categoria" style="display:none;" />
+        </div>
+
+        <div class="form-group col-md-7">
+            <input class="form-control" id="descategoria" value="@ViewBag.Produto.DescricaoCategoria" disabled="" />
+        </div>
+
+        <div class="form-group col-lg-1">
+            <button type="button" class="btn btn-default btn-sm Categoria" id="cat" data-toggle="modal" data-id="Categoria">
+                <img src="~/images/binoculo.png">
+            </button>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-1">
+            <label for="campo8" style="font-size:small">SubGrupo</label>
+            <input asp-for="id_produto_subcategoria" class="form-control" id="id_produto_subcategoria" value="@ViewBag.Produto.id_produto_subcategoria" style="display:none" />
+        </div>
+
+        <div class="form-group col-md-7">
+            <input class="form-control" value="@ViewBag.Produto.DescricaoSubCategoria" id="DescricaoSubCategoria" disabled />
+        </div>
+
+        <div class="form-group col-md-1">
+            <button type="button" class="btn btn-default btn-sm SubCategoria" id="sCategoria" data-toggle="modal" data-id="sCategoria">
+                <img src="~/images/binoculo.png">
+            </button>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="form-group col-md-1">
+            <label for="campo9">Un.Venda</label>
+            <input asp-for="id_produto_unidvenda" class="form-control" id="id_produto_unidvenda" value="@ViewBag.Produto.id_produto_unidvenda" style="display:none" />
+            <!-- -->
+        </div>
+
+        <div class="form-group col-md-7">
+            <input class="form-control" value="@ViewBag.Produto.DescricaoUnidVenda" id="DescricaoUnidVenda" disabled />
+        </div>
+
+        <div class="form-group col-md-1">
+            <button type="button" class="btn btn-default btn-sm Unidcompra" id="sCategoria" data-toggle="modal" data-id="sCategoria">
+                <img src="~/images/binoculo.png">
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Fim das Pesquisas -->
+
+    <div class="row">
+        <div class="form-group col-md-4">
+            <label for="campo">Quantidade</label>
+            <input class="form-control" id="EstoqueTotal" value="@ViewBag.Produto.qtEstoque" disabled />
+        </div>
+
+        <div class="form-group col-md-4">
+            <label for="campo">Valor Unitário</label>
+            <input asp-for="VlTabela1" class="form-control" id="ValorUnitario" value="@ViewBag.Produto.VlTabela1" type="text" onkeypress="return(MascaraMoeda(this,'.',',',event,2))" maxlength="12" />
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="horizontal form-group col-lg-6">
+            <button type="submit" class="btn btn-success btn-block">
+                Salvar
+            </button>
+        </div>
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="button" class="btn  btn-danger btn-block " onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+
+    </div>
+
+</form>
+
+<div id="myModal" class="modal" role="document">
+</div>
+
+<style>
+    .mesmo-tamanho {
+        width: 15%;
+        white-space: normal;
+    }
+
+    .pequeno {
+        width: 20%;
+    }
+
+    .medio {
+        width: 100%;
+    }
+</style>
+
+@section scripts{
+
+    <script>
+
+
+        $(function () {
+            $(".Unidade").click(function () {
+                $("#myModal").load("TabelaSubCategoria", function () {
+                    $("#myModal").modal('toggle');
+                })
+            });
+        });
+
+
+        $(function () {
+            $(".Unidcompra").click(function () {
+                $("#myModal").load("TabelaUnidadesMedidas", function () {
+                    $("#myModal").modal('toggle');
+                })
+            });
+        });
+
+        $(function () {
+            $(".SubCategoria").click(function () {
+                $("#myModal").load("TabelaSubCategoria", function () {
+                    $("#myModal").modal('toggle');
+                })
+            });
+        });
+
+
+        $(function () {
+            $(".Categoria").click(function () {
+                $("#myModal").load("TabelaCategoria", function () {
+                    $("#myModal").modal('toggle');
+
+                    // aqui espero o retorno
+                    /*
+                    $.ajax({
+
+                        processData: true,
+                        dataType: 'html',
+                        success:
+                            function (lista) {
+                                lista = lista.replace(/"/g, '');
+                                DtClient.innerHTML = lista;
+                                return true;
+                            },
+                        error: function (data) {
+                            alert("Verifique a Descrição ");
+                            return false;
+                        },
+                    });
+                    */
+
+                })
+            });
+        });
+
+        function Unidvenda() {
+            alert("Click Venda");
+        }
+
+        function Unidtributada() {
+            alert("Tributada");
+        }
+
+        function Retornar() {
+            window.location.href = "/Tabelas/Produtos";
+        }
+
+    </script>
+}

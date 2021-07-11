@@ -1,0 +1,77 @@
+﻿@model UnidadesMedidasModel;
+
+@{
+    ViewData["Title"] = "Unidades";
+}
+
+<h2>Unidade - Inclusão</h2>
+
+<form asp-action="IncluirUnidade" asp-controller="Tabelas" method="post" onsubmit="return VerificaDados();">
+
+    <hr />
+    <div class="row">
+
+        <div class="form-group col-md-1">
+            <label for="campo1">Código</label>
+            <input asp-for="id" type="text" class="form-control" id="Id" value="" disabled>
+        </div>
+
+        <div class="form-group col-md-8">
+            <label for="campo1">Nomde do Unidade</label>
+            <input asp-for="descricao" type="text" class="form-control" id="descricao" value="" placeholder="Nome do Unidade" maxlength="50">
+        </div>
+
+        <div class="form-group col-md-1">
+            <label for="campo1">Sigla</label>
+            <input asp-for="sigla" type="text" class="form-control" id="sigla" value="" placeholder="Ex: KG" maxlength="3">
+        </div>
+
+    </div>      
+
+    <!-- Buttons Finais-->
+    <hr />
+    <div class="row">
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="submit" class="btn btn-danger btn-block">
+                Salvar Dados
+            </button>
+        </div>
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="button" class="btn  btn-success btn-block" onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+
+    </div>
+    <!---->
+
+</form>
+
+<div id="myModal" class="modal fade" data-keyboard="false" data-backdrop="static" role="document">
+</div>
+
+<script>
+
+    function VerificaDados() {
+        var str = document.getElementById("descricao").value;
+        if (str == "0") {
+            alert("Unidade deve ser informada");
+            return false;
+        }
+
+        var str = document.getElementById("sigla").value;
+        if (str == "0") {
+            alert("Sigla deve ser informado");
+            return false;
+        }
+
+        return true;
+
+    }
+    function Retornar() {
+        window.location.href = "/Tabelas/UnidadesMedida";
+    }
+
+</script>

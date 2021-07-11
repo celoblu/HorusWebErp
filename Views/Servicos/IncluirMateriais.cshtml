@@ -1,0 +1,340 @@
+﻿@model OrdemServicoModel;
+
+@{
+    ViewData["Title"] = "Serviços";
+}
+
+<h2>Materiais O.S</h2>
+
+<form name="Materiais">
+
+    <div>
+        <input id="Id" value="@ViewBag.IdOS" style="display:none" />
+    </div>
+
+    <div class="well well-sm custom-control custom-radio col-lg-12">             
+
+        <div class="row">
+
+            <div class="form-group col-lg-1">
+                <Label>Código</Label>
+                <input id="idproduto" value="" class="form-control" disabled />
+            </div>
+
+            <div class="form-group col-md-1" style="display:none;">
+                <label for="campo1">Pesquisar</label>
+                <button type="button" class="btn btn-default btn-sm " id="IdProduto" data-toggle="modal" data-id="IdProduto" onclick="CodProduto();">
+                    <img src="~/images/binoculo.png">
+                </button>
+            </div>
+
+            <div class="form-group col-lg-8">
+                <Label>Nome do Produto</Label>
+                <input id="NomeProduto" value="" class="form-control" placeholder="Produto Utilizado" disabled />
+            </div>
+
+            <div class="form-group col-lg-1">
+                <Label>Pesquisar</Label>
+                <button type="button" class="btn btn-default btn-sm PesquisarMaterial" data-toggle="modal" data-id="IdProduto">
+                    <img src="~/images/binoculo.png">
+                </button>
+            </div>
+
+        </div>               
+
+        <div class="row">
+
+            <div class="form-group col-lg-1">
+                <Label>Quantidade</Label>
+                <input id="Qtd" value="" class="form-control" onKeyPress="return SomenteNumero(event, this);" onblur="Totalizador(this);" />
+            </div>
+
+            <div class="form-group col-lg-2">
+                <Label>Valor Unitário</Label>
+                <input id="VrlUnitario" value="" class="form-control" onblur="Totalizador(this);" onkeypress="return(MascaraMoeda(this,'.',',',event,2))"/>
+            </div>
+
+            <div class="form-group col-lg-2">
+                <Label>Valor Total</Label>
+                <input id="VrlTotal" value="" class="form-control" disabled />
+            </div>
+
+            <div class="form-group col-lg-1">
+                <!--<button type="button" class="btn btn-info btn-sm" onclick="Gravar()">Gravar</button>-->
+                <Label>Lançar</Label>
+                <button type="button" class="btn btn-default btn-sm" onclick="Gravar()">
+                    <img src="~/images/accept2.png">
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <table class="table table-bordered" id="TabProdutos">
+
+        <thead>
+            <tr>
+                <th class="col-lg-1" style="display:none">ID</th>
+                <th class="col-lg-5">Produto</th>
+                <th class="col-lg-1 text-center">Qtd.</th>
+                <th class="col-lg-1 text-center">VLr. Unit.</th>
+                <th class="col-lg-1 text-center">Total</th>
+                <th class="col-lg-1">#</th>
+
+            </tr>
+        </thead>
+
+        <tbody id="DtMateriais">
+
+            @{
+                // Valor data pcas
+                decimal Valor = 0;
+                decimal Total = 0;
+
+                foreach (var item in (List<ItensOrdemServicoModel>)ViewBag.ListagemMaterias)
+                {
+
+                    string DescricaoProduto = "";
+
+                    if (item.NomeProdutoX == null)
+                    {
+                        DescricaoProduto = item.NomeProduto.Trim();
+                    }
+                    else
+                    {
+                        DescricaoProduto = item.NomeProdutoX.Trim();
+                    }
+
+                    Valor = item.valor_unitario * item.quantidade;
+                    Total += Valor;
+
+                    <tr>
+                        <td id="idProduto" class="col-lg-1" style="display:none">@item.id</td>
+                        <td class="col-lg-5">@DescricaoProduto</td>
+                        <td class="col-lg-1">@item.quantidade</td>
+                        <td class="col-lg-1 text-right">@item.valor_unitario</td>
+                        <td class="col-lg-1 text-right">@Valor</td>
+                        <td class="col-lg-1"><button type="button" class="btn btn-danger" onclick="Excluir();">Excluir</button></td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+
+    </table>
+
+    <div class="row">
+        <div class="form-horizontal">
+            <button type="button" class="btn  btn-danger btn-block " onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+    </div>
+
+</form>
+
+
+<div id="myModal" class="modal" role="document">
+</div>
+
+<script>
+
+    Limpa();
+
+    // Excluir Material Lançado
+    function Excluir() {  
+        
+        if (confirm("Confirma a Exclusão")) {
+
+
+            $("tr").click(function () {
+
+                var idItens = $(this).find("td:eq(0)").text();               // ID Produto               
+                var idOs = parseFloat(document.getElementById("Id").value);  // ID Tabela de O.S
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Servicos/ExcluirProdutosOS",
+                    data: { id: idItens, IdOs: idOs },
+                    processData: true,
+                    dataType: 'json',
+                    success:
+                        function (lista) {
+                            lista = lista.replace(/"/g, '');
+                            DtMateriais.innerHTML = lista;
+                            Limpa();
+                            return true;
+
+                        },
+                    error: function (data) {
+                        alert("Erro... Verifique Com Suporte");
+                        return false;
+                    },
+                });
+
+            })
+        }
+    }
+
+    // Pesquisa Modal
+    $(function () {
+        $(".PesquisarMaterial").click(function () {
+            $("#myModal").load("/Tabelas/TabelaProdutos", function () {
+                $("#myModal").modal('toggle');
+            })
+        });
+    });
+
+
+    // Não estou usando
+    function TotalDeProdutos() {
+
+        var TotVlr = 0;
+
+        $('#DtHoras tr').each(function () {
+            var customerId = $(this).find("td").eq(5).html();
+            customerId = customerId.replace(/\D/g, "");  // Somente Numeros (Alfa)
+            TotVlr += parseFloat(customerId) / 100;       // converte em decimal
+        });
+
+        document.getElementById("VlrDosProdutosTotal").value = "R$ " + TotVlr.toFixed(2).replace(".", ",");
+        Limpa();
+    }
+    
+
+    function Limpa() {
+        document.getElementById("idproduto").value = "";
+        document.getElementById("Qtd").value = "";
+        document.getElementById("VrlUnitario").value = "";
+        document.getElementById("VrlTotal").value = "";
+        document.getElementById("NomeProduto").value = "";
+        return;
+    }
+
+
+    //*******************
+    // Pesq.  pelo Código
+    //*******************        
+    function CodProduto() {
+
+        var Variavel = document.getElementById("idproduto").value;
+
+        if (Variavel.length > 0) {
+
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "/Tabelas/LocalizarProduto",
+                    data: { id: Variavel },
+                    processData: true,
+                    dataType: 'html',
+                    success:
+                        function (retorno) {
+                            // alert(retorno);
+                            var obj = JSON.parse(retorno);
+                            document.getElementById("NomeProduto").value = obj.descricao;
+                            document.getElementById("idproduto").value = obj.id;
+                            return true;
+                        },
+                    error: function (data) {
+                        alert("Produto não Identificada");
+                        return false;
+                    },
+                });
+        }
+    }
+
+    function Gravar() {
+
+        Totalizador();
+
+        var idDaOs = document.getElementById("Id").value;
+        var idProduto = document.getElementById("idproduto").value;
+
+        var qtdp = document.getElementById("Qtd").value.replace("/", ".").replace(",", ".");
+        var vlrunitario = parseFloat(document.getElementById("VrlUnitario").value.replace("/", ".").replace(",", "."));
+
+        if (idProduto.length == 0) {
+            return false;
+        }
+
+        if (parseInt(qtdp) == 0 ) {
+            return false;
+        }
+
+        if (parseFloat(vlrunitario) == 0) {
+            return false;
+        }
+
+        if (Number.isNaN(qtdp)) return;
+        if (Number.isNaN(vlrunitario)) return;
+
+        $.ajax({
+            type: "POST",
+            url: "/Servicos/IncluirProdutosOS",
+            data: { IdOs: idDaOs, idp: idProduto, qtd: qtdp, vlru: vlrunitario },
+            processData: true,
+            dataType: 'json',
+            success:
+                function (lista) {
+                    lista = lista.replace(/"/g, '');
+                    DtMateriais.innerHTML = lista;
+                    Limpa();
+                    return true;
+                },
+            error: function (data) {
+                alert("Erro... Verifique Com Suporte");
+                return false;
+            },
+        });
+    }
+
+    function Totalizador() {
+
+        var qtd = parseFloat(document.getElementById("Qtd").value.replace("/", ".").replace(",", "."));
+        var vlrunitario = parseFloat(document.getElementById("VrlUnitario").value.replace("/", ".").replace(",", "."));
+
+        if (Number.isNaN(qtd)) return;
+
+        if (Number.isNaN(vlrunitario)) return;
+
+        document.getElementById("VrlTotal").value = (qtd * vlrunitario).toFixed(2);
+
+        return
+    }
+
+    //
+    $(function () {
+
+        $(".Itens").click(function () {
+
+            var D1 = document.getElementById("IdProduto").value;
+            var D2 = document.getElementById("VrlUnitario").value;
+            var D3 = document.getElementById("Qtd").value;
+
+            var id = id1 + "|" + id2
+            Qtd
+
+            $("#myModal").load("ItensOS/" + id, function () {
+                $("#myModal").modal('toggle');
+            })
+        });
+    });
+
+    function Filtrar() {
+        var StringData = document.getElementById("Filtro").value;
+        var radio = Radio(document.forms["ListaOS"].elements["TipoFiltro"]);  // document.getElementById("radio1").Value;
+
+        StringData = StringData.replace("/", " ").replace("+", " ").replace("-", " ");
+        window.location.href = "/Servicos/PesquisaOS/" + StringData + "|" + radio;
+    }
+
+
+    function Retornar() {
+        window.location.href = "/Servicos/OrdensDeServico";
+    }
+
+</script>
+
+

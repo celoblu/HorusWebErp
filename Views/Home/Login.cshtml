@@ -1,0 +1,107 @@
+﻿@model LoginModel
+
+@{
+    // para layout não ficar em loop infinito
+    Layout = null;
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+      asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+      asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+
+<link href="~/css/main.css" rel="stylesheet" />
+
+<html>
+
+<body style="background-color: #666666;">
+
+    <div class="limiter">
+
+
+        <div class="container-login100">
+
+
+            <div class="wrap-login100">
+
+
+                <form class="login100-form" asp-controller="Home" asp-action="Login" method="post">
+
+
+
+                    <span class="login100-form-title p-b-43" style="color:blueviolet">
+                        Horus-i ERP
+                    </span>
+
+
+
+                    <div class="login100-form-title p-b-43">
+                        <a href="http://www.htsinformatica.com.br" target="_blank">
+                            <IMG class="displayed" src="~/images/logohts.jpg" alt=”” width=250 height=250>
+                        </a>
+                    </div>
+
+
+
+                    <div class="row">.</div>
+
+
+
+                    <div class="row">
+                        <span class="login100-form-title p-b-43" style="font:bold">
+                            Dados de Entrada
+                        </span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                            <input type="text" class="form-control" asp-for="Usuario" placeholder="Usuario" autofocus>
+                        </div>
+                        <span asp-validation-for="Usuario" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                            <input type="password" class="form-control" asp-for="Senha" placeholder="Senha">
+                        </div>
+                        <span asp-validation-for="Senha" class="text-danger"></span>
+                    </div>
+
+                    <div class="container-login100-form-btn">
+                        <button type="submit" class="login100-form-btn">
+                            Entrar
+                        </button>
+                    </div>
+
+                    <div class="text-center p-t-46 p-b-20">
+                        <span class="txt2">
+                            Siga-nos 
+                        </span>
+                    </div>
+
+                    <div class="login100-form-title p-b-43">
+
+                        <div class="login100-form-social flex-c-m">
+                            <a href="#" class="login100-form-social-item flex-c-m bg1 m-r-5">
+                                <i class="fa fa-facebook-f" aria-hidden="true"></i>
+                            </a>
+
+                            <a href="#" class="login100-form-social-item flex-c-m bg2 m-r-5">
+                                <i class="fa fa-twitter" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="login100-more" style="background-image: url('images/n01.jpg');">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

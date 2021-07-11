@@ -1,0 +1,20 @@
+
+{
+  "Server": "3.128.214.208",
+  "Porta": "3306",
+  "Database": "ERP",
+  "User": "htsfabio",
+  "Password": "explorer@123"
+}
+ 
+
+/*
+{
+  "Server": "192.168.100.170",
+  "Porta": "3306",
+  "Database": "18695090000148",
+  "User": "hts",
+  "Password": "explorer@123"
+}
+*/
+

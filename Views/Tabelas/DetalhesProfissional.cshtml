@@ -1,0 +1,99 @@
+﻿@model ProfissionaisModel
+
+@{
+    ViewData["Title"] = "Detalhes";
+}
+
+<h2>Profissionais - Detalhes</h2>
+
+
+<form class="htsfundo" asp-action="DetalhesProfissional" asp-controller="Tabelas" method="post" onsubmit="return VerificaDados();">
+
+    <hr />
+    <div class="row">
+
+        <div class="form-group col-md-1">
+            <label for="campo1">Código</label>
+            <input asp-for="Id" type="text" class="form-control hts" id="Id" value="@ViewBag.Dados.Id" style="display:none">
+            <input type="text" class="form-control" value="@ViewBag.Dados.Id" disabled>
+
+        </div>
+
+        <div class="form-group col-md-10">
+            <label for="campo1">Nome do Profissional</label>
+            <input asp-for="nome" type="text" class="form-control hts" id="nome" value="@ViewBag.Dados.nome" placeholder="Digite o Nome" maxlength="40">
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="form-group col-md-2">
+            <label for="campo1">Apelido (Nome Curto)</label>
+        </div>
+
+        <div class="form-group col-md-8">
+            <label for="campo3">Função</label>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+
+        <div class="form-group col-md-2">
+            <input asp-for="apelido" type="text" class="form-control hts" id="apelido" value="@ViewBag.Dados.apelido" placeholder="Nome Curto" maxlength="20">
+        </div>
+
+        <div class="form-group col-md-8">
+            <input asp-for="dscfuncao" type="text" class="form-control hts" id="dscfuncao" value="@ViewBag.Dados.dscfuncao" maxlength="60" />
+        </div>
+
+    </div>
+
+
+    <!-- Buttons Finais-->
+    <hr style="color:blue;"/>    
+
+    <div class="row">    
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="submit" class="btn btn-danger btn-block">
+                Salvar Dados
+            </button>
+        </div>
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="button" class="btn btn-success btn-block" onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+
+    </div>
+    <!---->
+
+</form>
+
+<div id="myModal" class="modal fade" data-keyboard="false" data-backdrop="static" role="document">
+</div>
+
+<script>
+
+    function VerificaDados() {      
+        var str = document.getElementById("nome").value;
+        if (str == "0") {
+            alert("Nome deve ser informado");
+            return false;
+        }
+
+        return true;
+
+    }
+    function Retornar() {
+        window.location.href = "/Tabelas/FiltroProfissional";
+    }
+
+</script>
+
+

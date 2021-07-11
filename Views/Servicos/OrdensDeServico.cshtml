@@ -1,0 +1,160 @@
+﻿@model OrdemServicoModel;
+
+@{
+    ViewData["Title"] = "Serviços";
+}
+
+<h2>Ordens de Serviço</h2>
+
+<form name="ListaOS">
+     
+    <div class="well well-sm custom-control custom-radio col-lg-12">
+
+        <div class="form-group col-lg-8">
+            <input id="Filtro" value="" class="form-control" placeholder="Digite Produto ou Parte Dele" />
+        </div>
+
+        <div class="form-group col-lg-2">
+            <button type="button" class="btn btn-block btn-success" onclick="Filtrar()">Filtrar</button>
+        </div>
+
+        <div class="form-group col-lg-2">
+            <button type="button" class="btn btn-block btn-primary" onclick="Inclusao()">Nova O.S</button>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-9"></div>
+            <div class="col-lg-2">
+
+                <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="radio1" value="0" name="TipoFiltro" checked>
+                    <label class="form-check-label" for="f1">Cliente</label>
+
+                    <input type="radio" class="form-check-input" id="radio2" value="1" name="TipoFiltro">
+                    <label class="form-check-label" for="f2">Placa</label>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <table class="table table-bordered" id="TabProdutos">
+
+        <thead>
+            <tr>
+                <th class="col-lg-1" style="display:normal">Id</th>
+                <th class="col-lg-1" style="display:none">Id-ERP</th>
+                <th class="col-lg-4">Cliente</th>
+                <th class="col-lg-2 text-center">Veículo</th>
+                <th class="col-lg-1 text-center">Placa</th>
+                <th class="col-lg-1 text-center">Abertura</th>
+                <th class="col-lg-1">#</th>
+                <th class="col-lg-1">#</th>
+                <th class="col-lg-1">#</th>
+
+            </tr>
+        </thead>
+
+        <tbody id="tby">
+
+            @{
+
+                foreach (var item in (List<OrdemServicoModel>)ViewBag.ListaOrdemServicos)
+                {
+
+                    string dt = string.Format("{0:dd/MM/yyyy}", item.dataentrada);
+
+                    <tr>
+
+                        <td id="idAgenda" class="col-lg-1" style="display:normal">@item.Id</td>
+                        <td id="idAgenda" class="col-lg-1" style="display:none">@item.id_os_gcfox</td>
+                        <td id="idData" class="col-lg-4">@item.NomeCliente</td>
+                        <td id="idData" class="col-lg-1">@item.DescricaoEquipamento</td>
+                        <td id="nome" class="col-lg-1 text-right">@item.placa</td>
+                        <td id="nome" class="col-lg-1 text-right">@dt</td>
+
+                        <td id="btn1" class="col-lg-1"><button type="button" class="btn btn-info" onclick="Detalhes(@item.Id);">Detalhes</button></td>
+                        <td id="btn1" class="col-lg-1"><button type="button" class="btn" style="background-color:cornflowerblue" onclick="Materiais(@item.Id);">Lançar Mat.</button></td>
+                        <td id="btn1" class="col-lg-1"><button type="button" class="btn" style="background-color:lightcoral" onclick="Impressao(@item.Id);">Impressão</button></td>
+
+                    </tr>
+                }
+            }
+
+        </tbody>
+
+    </table>
+
+    <div class="row">
+        <div class="form-horizontal">
+            <button type="button" class="btn  btn-danger btn-block " onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+    </div>
+
+</form>
+
+<script>
+
+    function Materiais(cod) {
+
+        window.location.href = "/Servicos/IncluirMateriais2/" + cod;
+    }
+
+    function Detalhes(cod) {
+
+        window.location.href = "/Servicos/DetalhesOS2/" + cod;
+    }
+
+    function Inclusao(cod) {
+
+        window.location.href = "/Servicos/InclusaoOS2/" + cod;
+    }
+
+
+
+    function Impressao(cod) {
+        window.open("/Servicos/Print/" + cod, '_blank');
+
+        /*
+        $("tr").click(function () {
+
+            var cod = $(this).find("td:eq(0)").text();
+
+            $.ajax({
+                type: "POST",
+                url: "/Servicos/impressao",
+                data: { id: cod },
+                processData: true,
+                dataType: 'html',
+                success:
+                    function (lista) {
+                        return true;
+                    },
+                error: function (data) {
+                    alert("Erro de impressao... Verifique Com Suporte");
+                    return false;
+                },
+            });
+        })
+        */
+    }
+
+    function Filtrar() {
+
+        var StringData = document.getElementById("Filtro").value;
+        var radio = Radio(document.forms["ListaOS"].elements["TipoFiltro"]);  // document.getElementById("radio1").Value;
+
+        StringData = StringData.replace("/", " ").replace("+", " ").replace("-", " ");
+        window.location.href = "/Servicos/PesquisaOS/" + StringData + "|" + radio;
+    }
+
+    function Retornar() {
+        window.location.href = "/Home/Index";
+    }
+
+</script>
+
+

@@ -1,0 +1,127 @@
+﻿@model EquipamenotosModel
+
+@{
+    ViewData["Title"] = "Serviços";
+}
+
+<h2>Listagem Equipamentos/Veículos</h2>
+
+<form name="ListaOS">
+
+    <div class="well well-sm custom-control custom-radio col-lg-12">
+
+        <div class="form-group col-lg-8">
+            <input id="Filtro" value="" class="form-control" placeholder="Digite Produto ou Parte Dele" />
+        </div>
+
+        <div class="form-group col-lg-2">
+            <button type="button" class="btn btn-block btn-success" onclick="Filtrar()">Filtrar</button>
+        </div>
+
+        <div class="form-group col-lg-2">
+            <button type="button" class="btn btn-block btn-primary" onclick="Inclusao()">Inclusão</button>
+        </div>
+   
+    </div>
+
+    <table class="table table-bordered" id="TabProdutos">
+
+        <thead>
+            <tr>
+                <th class="col-lg-1" style="display:none">id</th>               
+                <th class="col-lg-5">Equipamento/Veículo</th>                              
+                <th class="col-lg-1">#</th>
+                <th class="col-lg-1">#</th>
+
+            </tr>
+        </thead>
+
+        <tbody id="DtEquip">
+
+            @{
+
+                foreach (var item in (List<EquipamenotosModel>)ViewBag.ListaEquipamentos)
+                {                                     
+
+                    <tr>
+                        <td class="col-lg-1" style="display:none">@item.id</td>
+                        <td class="col-lg-5">@item.Descricao</td>                                                              
+                        <td class="col-lg-1"><button type="button" class="btn btn-info" onclick="Detalhes();">Detalhes</button></td>
+                        <td class="col-lg-1"><button type="button" class="btn btn-danger" onclick="Excluir();">Excluir</button></td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+
+    </table>
+
+    <div class="row">
+        <div class="form-horizontal">
+            <button type="button" class="btn  btn-danger btn-block " onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+    </div>
+
+</form>
+
+<script>
+
+    function Inclusao(cod) {
+
+        window.location.href = "/Servicos/IncluirEquipamento/" 
+    }
+
+    function Detalhes() {
+        $("tr").click(function () {
+            var cod = $(this).find("td:eq(0)").text(); 
+            window.location.href = "/Servicos/DetalhesEquipamento2/" + cod
+        })            
+    }
+
+    function Excluir() {
+
+        if (confirm("Confirma a Exclusão")) {
+
+            $("tr").click(function () {
+
+                var idEqu = $(this).find("td:eq(0)").text();               // ID Tabela                
+                $.ajax({
+                    type: "POST",
+                    url: "/Servicos/ExcluirEquipamento",
+                    data: { id: idEqu },
+                    processData: true,
+                    dataType: 'json',
+                    success:
+                        function (lista) {
+                            lista = lista.replace(/"/g, '');
+                            DtEquip.innerHTML = lista;                            
+                            return true;
+                        },
+                    error: function (data) {
+                        alert("Erro... Verifique Com Suporte");
+                        return false;
+                    },
+                });
+            })
+        }
+                
+       // window.location.href = "/Servicos/ExcluirEquipamento/" + cod
+    }
+
+    function Filtrar() {
+
+        var StringData = document.getElementById("Filtro").value;  
+        StringData = StringData.replace("/", " ").replace("+", " ").replace("-", " ");
+
+        window.location.href = "/Servicos/PesquisaEquipamento/" + StringData;
+    }
+
+    function Retornar() {
+        window.location.href = "/Home/Index";
+    }
+
+</script>
+
+

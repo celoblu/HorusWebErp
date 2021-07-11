@@ -1,0 +1,64 @@
+﻿
+@model EquipamenotosModel;
+
+@{
+    ViewData["Title"] = "Equipamentos/Veículos";
+}
+
+<h2>Equipamentos/Veículos - Inclusão</h2>
+
+<form asp-action="IncluirEquipamento" asp-controller="Servicos" method="post" onsubmit="return VerificaDados();">
+
+    <hr />
+    <div class="row">
+        <div class="form-group col-md-2">
+            <label for="campo1">ID</label>
+            <input type="text" class="form-control" id="ID" disabled>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-10">
+            <label for="campo1">Descrição do Equipamento/Veículo</label>
+            <input asp-for="Descricao" type="text" class="form-control" id="Descricao" value="" placeholder="Digite Equipamento/Veiculo" maxlength="80">
+        </div>
+    </div>
+
+    <!-- Buttons Finais-->
+    <hr />
+    <div class="row">
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="submit" class="btn btn-danger btn-block">
+                Salvar Dados
+            </button>
+        </div>
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="button" class="btn  btn-success btn-block" onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+
+    </div>
+    <!---->
+
+</form>
+
+@section scripts{
+    <script>               
+        
+        function VerificaDados() {
+            var str = document.getElementById("Descricao").value.trim();
+            if (str.length == 0) {
+                alert("Descrcição é Obrigatória");
+                return false;
+            }
+        }
+
+        function Retornar() {
+            window.location.href = "/Servicos/Equipamentos";
+        }
+
+    </script>
+}

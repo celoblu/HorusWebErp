@@ -1,0 +1,272 @@
+﻿
+@model ClienteModel
+
+@{
+    ViewData["Title"] = "Entidades";
+}
+
+<h2>Clientes/Fornecedores/Transportadoras - Detalhes</h2>
+
+<form name="DetalhesEntidade" asp-action="DetalhesEntidade" asp-controller="Tabelas" onsubmit="return TestarCampos();">
+
+    <!-- Dados do cliente -->
+    <hr />
+
+    <div class="row">
+               
+         <input asp-for="id" type="text" class="form-control hts" id="id"  value="@ViewBag.entidades.id"  style="display:none" />
+        
+
+
+        <div class="form-group col-md-3">
+            <label for="campo1">Cpf</label>
+            <input asp-for="cpf" type="text" class="form-control hts" id="Cpf" placeholder="CPF do Cliente" onkeyup="Mascara('cpf',this,event);" onblur="ValidaCpf(this,event)" value="@ViewBag.entidades.cpf" maxlength="14" />
+        </div>
+
+
+        <div class="form-group col-md-2">
+            <label for="campo2">Data</label>
+            <input asp-for="dtanascimento" type="text" class="form-control hts" id="Dtanasc" placeholder="Data Nasc." onkeyup="Mascara('data', this, event);" value="@ViewBag.entidades.dtanascimento" maxlength="10" />
+        </div>
+
+        <div class="form-group col-md-5">
+            <label for="campo3">Cnpj</label>
+            <input asp-for="cnpj" type="text" class="form-control hts" id="Cnpj" placeholder="CNPJ da Empresa" onkeyup="Mascara('cnpj',this,event);" onblur="validarCNPJ(this, event)" value="@ViewBag.entidades.cnpj" maxlength="18" />
+        </div>
+
+        <div class="form-group col-sm-1">
+            <label>Pesquisar</label>
+            <button type="button" class="btn btn-default btn-sm" onclick="Pesquisarcnpj();">
+                <img src="~/images/binoculo.png">
+            </button>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-10">
+            <label>Descrição do Produto</label>
+            <input asp-for="nome" type="text" class="form-control hts" id="NomeCliente" placeholder="Nome do Cliente" value="@ViewBag.entidades.nome" style="text-transform:uppercase;" />
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="form-group col-md-2">
+            <label>CEP</label>
+            <input asp-for="cep" class="form-control hts" id="Cep" onkeyup="Mascara('cep',this,event);" value="@ViewBag.entidades.cep" maxlength="9" />
+        </div>
+
+        <div class="form-group col-sm-1">
+            <label>Pesquisar</label>
+            <button type="button" class="btn btn-default btn-sm" onclick="PesquisarCep();">
+                <img src="~/images/binoculo.png">
+            </button>
+        </div>
+
+        <div class="form-group col-md-7">
+            <label>Logradouro</label>
+            <input asp-for="logradouro" class="form-control hts" id="Endereco" value="@ViewBag.entidades.logradouro" style="text-transform:uppercase;" />
+        </div>
+
+        <div class="form-group col-md-1">
+            <label>Numero</label>
+            <input asp-for="numero" class="form-control hts" value="@ViewBag.entidades.numero" id="Numero" />
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="form-group col-md-4">
+            <label>Bairro</label>
+            <input asp-for="bairro" class="form-control hts " id="Bairro" value="@ViewBag.entidades.bairro" style="text-transform:uppercase;" />
+        </div>
+
+        <div class="form-group col-md-1">
+            <label>UF</label>
+            <input asp-for="uf" class="form-control hts" id="Uf" value="@ViewBag.entidades.uf" style="text-transform:uppercase;" />
+        </div>
+
+        <div class="form-group col-md-3">
+            <label>Cidade</label>
+            <input asp-for="cidade" class="form-control hts"  value="@ViewBag.entidades.cidade"  id="Cidade" style="text-transform:uppercase;" />
+        </div>
+
+
+        <div class="form-group col-md-2">
+            <label>Telefone</label>
+            <input asp-for="fone1" class="form-control hts" id="Fone1"  value="@ViewBag.entidades.fone1"/>
+        </div>
+
+        <div class="form-group col-md-2">
+            <label>Telefone</label>
+            <input asp-for="fone2" class="form-control hts" id="Fone2" value="@ViewBag.entidades.fone2"/>
+        </div>
+
+    </div>
+
+    <hr />
+    <div class="row">
+        <div class="form-group col-md-9">
+            <label>E-mail</label>
+            <input asp-for="email" class="form-control hts" id="Email" value="@ViewBag.entidades.email"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-9">
+            <label>Referencia</label>
+            <input asp-for="complemento" class="form-control hts" id="Complemento" value="@ViewBag.entidades.complemento"/>
+        </div>
+    </div>
+
+    <!-- Descricao / Conclusão -->
+    <hr />
+
+    <div class="row">
+
+        <div class="form-group span9">
+            <dev class="form-group-sm">
+                <textarea asp-for="complemento" class="form-control hts" rows="5" cols="180" id="Complemento" name="Complemento"></textarea>
+            </dev>
+        </div>
+
+    </div>
+
+    <!-- Buttons -->
+
+
+    <hr />
+
+
+    <div class="row">
+
+        <div class="horizontal form-group col-lg-6">
+            <button type="submit" id="Btnsubmit" class="btn btn-success btn-block">
+                Salvar
+            </button>
+        </div>
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="button" class="btn  btn-danger btn-block" onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+
+    </div>
+
+</form>
+
+<div id="myModal" class="modal" role="document">
+</div>
+
+@section scripts{
+
+    <script>
+        
+        // Pesquisa Cnpj
+        function Pesquisarcnpj() {
+            var StringData = document.getElementById("Cnpj").value;
+
+            if (StringData.length > 0) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Tabelas/PesquisarCnpj",
+                    data: { id: StringData },
+                    processData: true,
+                    dataType: 'json',
+                    success:
+                        function (retorno) {
+
+                            // alert(retorno);
+                            var obj = JSON.parse(retorno);
+
+                            document.getElementById("Fone1").value = obj.fone1;
+                            document.getElementById("Cep").value = obj.cep;
+                            document.getElementById("NomeCliente").value = obj.nome;
+                            document.getElementById("Endereco").value = obj.logradouro;
+                            document.getElementById("Numero").value = obj.numero;
+                            document.getElementById("Cidade").value = obj.cidade;
+                            document.getElementById("Bairro").value = obj.bairro;
+                            document.getElementById("Uf").value = obj.uf;
+
+                            return true;
+                        },
+                    error: function (data) {
+                        alert("Cnpj não identificado");
+                        return false;
+                    },
+                });
+            }
+        }
+
+
+
+        // Pesquisa CEP
+        function PesquisarCep() {
+            var StringData = document.getElementById("Cep").value;
+
+            if (StringData.length > 0) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Tabelas/PesquisarCep",
+                    data: { id: StringData },
+                    processData: true,
+                    dataType: 'html',
+                    success:
+                        function (retorno) {
+
+                            // alert(retorno);
+                            var obj = JSON.parse(retorno);
+
+                            document.getElementById("Cep").value = obj.cep;
+                            document.getElementById("Endereco").value = obj.logradouro;
+                            document.getElementById("Cidade").value = obj.localidade;
+                            document.getElementById("Bairro").value = obj.bairro;
+                            document.getElementById("Uf").value = obj.uf;
+
+                            //document.getElementById("Complemento").value = obj.complemento;
+                              // = obj. ibge
+                              // = obj. gia
+
+                            return true;
+                        },
+                    error: function (data) {
+                        alert("Cnpj não identificado");
+                        return false;
+                    },
+                });
+            }
+        }
+
+        $(document).ready(function () {
+            $("#telefone").inputmask("mask", { "mask": "(99) 9999-99999" });
+            $("#cpf").inputmask("mask", { "mask": "999.999.999-99" }, { reverse: true });
+            $("#cep").inputmask("mask", { "mask": "99999-999" });
+            $("#Cep").inputmask("mask", { "mask": "99999-999" });
+            $("#nascimento").inputmask("mask", { "mask": "99/99/9999" });
+            $("#preco").inputmask("mask", { "mask": "999.999,99" }, { reverse: true });
+            $("#valor").inputmask("mask", { "mask": "#.##9,99" }, { reverse: true });
+            $("#ip").inputmask("mask", { "mask": "999.999.999.999" });
+        });
+
+        function TestarCampos() {
+
+            var str = document.getElementById("NomeCliente").value.trim();
+            if (str.length == 0) {
+                alert("Cliente Não Informado");
+                return false;
+            }
+
+        }
+
+        function Retornar() {
+            window.location.href = "/Tabelas/Entidades";
+        }
+
+    </script>
+}
+

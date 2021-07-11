@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HorusWebErp</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/Procedures.js"></script>
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>        
+        <script src="~/js/Procedures.js"></script>
+    </environment>
+
+
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
+        </script>
+
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/js/Procedures.js"></script>
+    </environment>
+
+
+
+</head>
+
+<body onload="CargaLogado()">
+
+    <nav class="navbar navbar-inverse navbar-static-top role=" navigation"">
+
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <a style="color:antiquewhite ;font-size:large" asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Horus-I Erp</a>
+
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#Mnu1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <div class="navbar-collapse collapse" id="Mnu1">
+
+                <ul class="nav navbar-nav">
+
+                    <li class="dropdown dropdown-primary">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true">
+                            Tabelas
+                            <span class="caret"></span>
+                        </a>
+                        
+                        <ul class="dropdown-menu dropdown-primary">
+
+                            <li class="list-group-item" id="listx">
+                                <a asp-area="" asp-controller="Tabelas" asp-action="Produtos">Produtos</a>
+                            </li>
+
+                            <li class="list-group-item">
+                                <a asp-area="" asp-controller="Tabelas" asp-action="EntradaEstoque">Estoque</a>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <a asp-area="" asp-controller="Tabelas" asp-action="Entidades">
+                                    Clientes
+                                    <span class="glyphicon glyphicon-people"></span>
+                                </a>
+                            </li>
+
+                            <li class="list-group-item">
+                                <a asp-area="" asp-controller="Tabelas" asp-action="FiltroProfissional">
+                                    <span class="glyphicon glyphicon-user"></span>Técnicos
+                                </a>
+                            </li>
+
+                            <li>
+                                <!--<a asp-area="" asp-controller="Tabelas" asp-action="Entidades">Entidades</a> -->
+                                <!-- Html.ActionLink("Serviços", "Entidades", "Tabelas") -->
+                            </li>
+
+                            <li class="list-group-item">
+                                <a asp-area="" asp-controller="Tabelas" asp-action="Grupos">Grupos</a>
+                            </li>
+
+                            <li class="list-group-item"><a href="#">Unidades de Medida</a></li>
+
+                        </ul>
+
+                    </li>
+
+                    <li>
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true">
+                            Ordem de Serviços...
+                            <span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+
+                            <li class="list-group-item">
+                                <a asp-area="" asp-controller="Servicos" asp-action="OrdensDeServico">O.S</a>
+                            </li>
+
+                            <li class="list-group-item">
+                                <a asp-area="" asp-controller="Servicos" asp-action="Equipamentos" class="Select">Equipamentos & Veículos</a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                    <li>
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true">
+                            Relatórios
+                            <span class="caret"></span>
+                        </a>                        
+
+                        <ul class="dropdown-menu">
+
+
+                            <li class="list-group-item">
+                                <a href="#">Relatórios 1</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#">Relatórios 2</a>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <a href="#">Relatórios 3</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#">Relatórios 4</a>
+                            </li>
+                        </ul>
+
+                    </li>
+
+
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true">Faturamento<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li class="list-group-item"><a href="#">Pedidos</a></li>
+                            <li class="list-group-item"><a href="#">NF-e</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true">
+                            Financeiro
+                            <span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li class="list-group-item"><a asp-area="" asp-controller="Consultas" asp-action="ConsultaPedidos">Pedidos</a></li>
+                            <li class="list-group-item"><a href="#">A Receber</a></li>
+                            <li class="list-group-item"><a href="#">A Pagar</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-haspopup="true">Consultas<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li class="list-group-item"><a asp-area="" asp-controller="Consultas" asp-action="ConsultaPedidos">Pedidos</a></li>
+                            <li class="list-group-item"><a href="#">Produtos</a></li>
+                            <li class="list-group-item"><a href="#">Clientes</a></li>
+                        </ul>
+                    </li>
+
+                    <!--<li><a style="color:white" asp-area="" asp-controller="Home" asp-action="About">About</a></li> -->
+
+                    <li><a asp-area="" asp-controller="Home" asp-action="Login" aria-haspopup="true">Sair</a></li>
+
+                </ul>
+
+                @using Microsoft.AspNetCore.Http
+                @inject IHttpContextAccessor HttpContextAccessor
+                <div id="NomeEmpresa" style="color:#40E0D0; padding-top:15px;background-color:#000000;font-style:italic">
+
+                </div>
+
+            </div>
+        </div>
+
+        <!--
+        <form class="form-inline">
+            <div class="md-form my-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+            </div>
+        </form>
+            -->
+
+    </nav>
+
+
+
+
+    <partial name="_CookieConsentPartial" />
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; 2021 - HorusWebErp</p>
+        </footer>
+    </div>
+
+    @RenderSection("Scripts", required: false)
+
+    <script>
+        function CargaLogado()
+       {
+           //  Foi Colocado Asps simples porque Javascript precisa interpretar esta sendo rpocessado no servidor
+           var nome = '@HttpContextAccessor.HttpContext.Session.GetString("NomeEmpresa")'
+           if (nome != "")  // Empresa logada
+           {
+               var divNome = document.getElementById("NomeEmpresa");
+               divNome.innerHTML = "  " + nome ;
+           }
+           else {   // Usuário não logado
+
+               window.location.href = "../Home/login";
+           }
+
+       }
+    </script>
+
+
+</body>
+</html>
+

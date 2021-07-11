@@ -1,0 +1,326 @@
+﻿@model OrdemServicoModel
+
+@{
+    ViewData["Title"] = "O.S";
+}
+
+<h2>Ordem de Serviço - Nova O.S </h2>
+
+<form class="htsfundo" name="InclusaoOS" asp-action="InclusaoOS" asp-controller="Servicos" onsubmit="return TestarCampos();">
+
+    <!-- Dados do cliente -->
+    <hr />
+
+    <div class="row">
+        <div class="form-group col-md-10">
+            <label for="campo1">Descrição</label>
+            <input asp-for="NomeCliente" type="text" class="form-control hts" id="NomeCliente" placeholder="Nome do Cliente" disabled />
+        </div>
+
+        <div class="form-group col-md-1">
+            <label for="campo2">Código</label>
+            <input asp-for="id_entidade" type="text" class="form-control hts" id="IdEntidade" style="display:normal" />
+            <input asp-for="id_cliente_gcfox" type="text" class="form-control hts" id="id_cliente_gcfox" style="display:none" />
+            <input type="text" class="form-control hts" id="id_erp" style="display:none"/>
+        </div>
+
+
+        <div class="form-group col-md-1">
+            <label for="campo2">Pesquisar</label>
+            <button type="button" class="btn btn-default btn-sm PesquisarCliente" data-toggle="modal">
+                <img src="~/images/binoculo.png">
+            </button>
+        </div>
+        
+
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-7">
+            <label for="campo3">Endereco</label>
+            <input class="form-control hts" id="Endereco" disabled/> 
+        </div>
+
+        <div class="form-group col-md-4">
+            <label for="campo3">Cidade</label>
+            <input class="form-control hts" id="Cidade" disabled /> 
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            <label for="campo5">Bairro</label>
+            <input class="form-control hts" id="Bairro" disabled /> 
+        </div>
+
+        <div class="form-group col-md-2">
+            <label for="campo5">Telefone</label>
+            <input class="form-control hts" id="Fone1" disabled />  
+        </div>
+
+        <div class="form-group col-md-2">
+            <label for="campo4">Telefone</label>
+            <input class="form-control hts" id="Fone2" disabled/>  
+
+        </div>
+
+    </div>
+
+    <!-- Equipamento  **** Pesquisa  -->
+    <hr />
+
+    <div class="row">
+
+        <div class="form-group col-md-2">
+            <label for="campo5">Placa</label>
+            <input asp-for="placa" class="form-control hts" id="Placa" />
+        </div>
+
+        <div class="form-group col-sm-1">
+            <label for="campo6">Pesquisar</label>
+            <button type="button" class="btn btn-default btn-sm" onclick="PesquisarPlaca();">
+                <img src="~/images/binoculo.png">
+            </button>
+        </div>
+
+        <!--
+        <div class="form-group col-md-1">
+             <label for="campo7">ID</label> -->
+
+        <input asp-for="id_os_equipamentos" class="form-control hts" id="id_os_equipamentos" style="font-size:small; display:none" />    
+
+        <div class="form-group col-md-6">
+            <label for="campo7">Veículo</label>
+            <input class="form-control hts" id="Veiculo" />  
+        </div>
+
+        <div class="form-group col-sm-1">
+            <label for="campo6">Pesquisar</label>
+            <button type="button" class="btn btn-default btn-sm PesquisarVeiculo" data-toggle="modal" data-id="Veiculo">
+                <img src="~/images/binoculo.png">
+            </button>
+        </div>
+
+        <div class="form-group col-md-1">
+            <label for="campo5">Ano</label>
+            <input asp-for="ano" class="form-control hts" id="Ano"  />
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="form-group col-md-2">
+            <label for="campo8">km</label>
+            <input asp-for="km" class="form-control hts" id="Km" onKeyPress="return SomenteNumero(event, this);" /> <!--  -->
+        </div>
+
+        <div class="form-group col-md-8">
+            <label for="campo5">Serviço</label>
+            <input asp-for="modelo" class="form-control hts"  id="Servico" />
+        </div>
+
+    </div>
+    
+    <!-- Descricao / Conclusão -->
+    <hr />
+
+    <div class="row">
+
+        <div class="form-group span9">
+            <dev class="form-group-sm">
+                <textarea class="memo" asp-for="conclusao" class="form-control" rows="5" cols="180" id="conclusao" name="conclusao" ></textarea>
+            </dev>
+        </div>
+
+    </div>    
+
+    <!-- Buttons -->
+
+    <hr />    
+
+    <div class="row">
+
+        <div class="horizontal form-group col-lg-6">
+            <button type="submit" id="Btnsubmit" class="btn btn-success btn-block" >            
+                Salvar
+            </button>
+        </div>
+        
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="button" class="btn  btn-danger btn-block" onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+
+    </div>
+
+</form>
+
+<div id="myModal" class="modal" role="document">
+</div>
+
+<style>
+
+    textarea {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    .hts {
+        font-weight: bold;
+        color: #D2691E;
+    }
+   
+    hr {
+        border-color: #1E90FF;
+        color: #ADD8E6;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    .mesmo-tamanho {
+        width: 15%;
+        white-space: normal;
+    }
+
+    .pequeno {
+        width: 20%;
+    }
+
+    .medio {
+        width: 100%;
+    }
+</style>
+
+@section scripts{
+
+    <script>
+
+        //StringData = StringData.replace(/\//g, ''); // limpa campo data
+        
+        // Pesquisa Cliente
+        $(function () {
+            $(".PesquisarCliente").click(function () {
+                $("#myModal").load("TabelaClientes", function () {
+                    $("#myModal").modal('toggle');
+                })
+            });
+        });
+        
+        // Pesqwuisa Veiculo Equipamento
+        $(function () {
+            $(".PesquisarVeiculo").click(function () {
+                $("#myModal").load("TabelaVeiculos", function () {
+                    $("#myModal").modal('toggle');
+                })
+            });
+        });
+
+
+        // Pesquisa Placa
+        function PesquisarPlaca() {
+
+            var StringData = document.getElementById("Placa").value;
+
+            if (StringData.length > 0) {
+
+                $.ajax(
+                    {
+                    type: "POST",
+                    url: "/Servicos/LocalizarPlaca",
+                    data: { id: StringData },
+                    processData: true,
+                    dataType: 'html',
+                    success:
+                        function (retorno) {
+
+                            // alert(retorno);
+                            var obj = JSON.parse(retorno);                                                       
+
+                            document.getElementById("Endereco").value = obj.logradouro;
+                            document.getElementById("NomeCliente").value = obj.nomeCliente;
+                            document.getElementById("IdEntidade").value = obj.id_entidade;                                                      
+                            document.getElementById("Bairro").value = obj.bairro;
+                            document.getElementById("Fone1").value = obj.fone1;
+                            document.getElementById("Cidade").value = obj.cidade;
+                            document.getElementById("Fone2").value = obj.fone2;
+                            document.getElementById("Ano").value = obj.ano;
+                            document.getElementById("Veiculo").value = obj.descricaoEquipamento;
+                            document.getElementById("id_os_equipamentos").value = obj.id_os_equipamentos;
+
+                            return true;
+                        },
+                    error: function (data) {
+                        alert("Placa não Identificada");
+                        return false;
+                    },
+                });
+            }
+        }
+                     
+
+        function dados() {                           
+
+            var id = document.getElementById("IdEntidade").value.trim();                     
+            id = id + "|" + document.getElementById("Placa").value.trim();           
+            id = id + "|" + document.getElementById("id_os_equipamentos").value.trim();
+            id = id + "|" + document.getElementById("Km").value.trim();
+            id = id + "|" + document.getElementById("Servico").value.trim();
+            id = id + "|" + document.getElementById("conclusao").value.trim();                            
+
+            return id;
+        }
+
+        function TestarCampos() {
+            
+            var str = document.getElementById("IdEntidade").value.trim();
+            if (str == 0) {
+                alert("Cliente Não Informado");                
+                return false;
+            }
+
+            var str = document.getElementById("Placa").value.trim();
+            if (str.length < 7) {
+                alert("Placa Não Informada ou Informada Incorretamente");
+                return true;
+            }
+
+            var str = document.getElementById("id_os_equipamentos").value.trim();
+            if (str == 0) {
+                alert("Veículo não Informado");
+                return false;
+            }
+
+            document.getElementById("Btnsubmit").disabled = true;
+
+             /*
+
+            var str = document.getElementById("Km").value.trim();
+            if (str == 0) {
+                alert("Km Não Informada");
+                return false;
+            }
+
+           
+            var str = document.getElementById("Ano").value.trim();
+            if (str == 0) {
+                alert("Ano do Veículo Não Informado");
+                return false;
+            }                       
+           
+            Servico
+            conclusao
+            */
+        }
+
+        function Retornar() {
+            window.location.href = "/Servicos/OrdensDeServico";
+        }
+
+    </script>
+}
+

@@ -1,0 +1,155 @@
+﻿@model ProdutosModel
+
+<h2>Cadastro de Produtos</h2>
+
+<form class="htsfundo" asp-action="NovoProduto" asp-controller="Tabelas" method="post" onsubmit="VerificaDados();">
+
+    <hr />
+    <div class="row">
+        <div class="form-group col-md-10">
+            <label for="campo1">Descrição</label>
+            <input asp-for="descricao" type="text" class="form-control hts" id="Descricao" value="">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-10">
+            <label for="campo1">Inf. Adicional</label>
+            <input asp-for="infadicional" type="text" class="form-control hts" id="InfAdcicional" value="">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-4">
+            <label for="campo1">Referência</label>
+            <input asp-for="referencia" type="text" class="form-control hts" id="Referencia" value="">
+        </div>
+    </div>
+
+    <div class="row">
+
+        <!-- <label for="campo1">Unidade</label> -->
+        <input asp-for="id_produto_categoria" type="text" class="form-control hts" id="id_produto_categoria" style="display:none">
+
+        <div class="form-group col-md-4">
+            <label for="campo1">Grupo / Categoria</label>
+            <input type="text" class="form-control" id="descategoria" value="" disabled />
+        </div>
+
+        <div class="form-group col-lg-1">
+            <label for="campo1">...</label>
+            <button type="button" class="btn btn-default btn-sm Categoria" id="cat" data-toggle="modal" data-id="Categoria">
+                <img src="~/images/binoculo.png">
+            </button>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label for="campo1">Qtd. Estoque</label>
+            <input asp-for="qtEstoque" type="text" class="form-control hts" id="QtdEstoque" value="">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label for="campo1">Valor de Venda</label>
+            <input asp-for="VlTabela1" type="text" class="form-control hts" id="Valor" value="" onkeypress="return(MascaraMoeda(this,'.',',',event,2))">
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+
+        <div class="horizontal form-group col-lg-6">
+            <button type="submit" id="Btnsubmit" class="btn btn-success btn-block">
+                Salvar
+            </button>
+        </div>
+
+        <div class="form-horizontal form-group col-lg-6">
+            <button type="button" class="btn  btn-danger btn-block" onclick="Retornar();">
+                Voltar
+            </button>
+        </div>
+
+    </div>
+
+</form>
+
+<div id="myModal" class="modal" role="document">
+</div>
+
+
+<style>
+    .mesmo-tamanho {
+        width: 15%;
+        white-space: normal;
+    }
+
+    .pequeno {
+        width: 20%;
+    }
+
+    .medio {
+        width: 100%;
+    }
+</style>
+
+@section scripts{
+
+    <script>
+
+        $(function () {
+            $(".Categoria").click(function () {
+                $("#myModal").load("/Tabelas/TabelaCategoria", function () {
+                    $("#myModal").modal('toggle');
+
+                    // retorno
+                    /*
+                    $.ajax({
+                        processData: true,
+                        dataType: 'html',
+                        success:
+                            function (lista) {
+                                lista = lista.replace(/"/g, '');
+                                DtClient.innerHTML = lista;
+                                return true;
+                            },
+                        error: function (data) {
+                            alert("Verifique a Descrição ");
+                            return false;
+                        },
+                    });
+                    */
+
+                })
+            });
+        });
+
+        function Subcategoria() {
+            alert("Click SubCategoria");
+        }
+
+        function Unidcompra() {
+            alert("Click Compra");
+        }
+
+        function Unidvenda() {
+            alert("Click Venda");
+        }
+
+        function Unidtributada() {
+            alert("Tributada");
+        }
+
+        function Retornar() {
+            window.location.href = "/Tabelas/Produtos";
+        }
+
+    </script>
+}
+
+
